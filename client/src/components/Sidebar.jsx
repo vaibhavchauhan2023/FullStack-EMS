@@ -17,7 +17,7 @@ const Sidebar = () => {
         setMobileOpen(false)
     },[pathname])
 
-    const role = "" || "Employee"
+    const role = "Admin" || "Employee"
     const navItems = [
         {
             name: "Dashboard",
@@ -110,7 +110,6 @@ const Sidebar = () => {
                             </span>
                             {isActive && <ChevronRightIcon className="w-3.5 h-3.5 text-indigo-500/50"/> }
                         </Link>
-                        
                     )
                 })}
             </div>
