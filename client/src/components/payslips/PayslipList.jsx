@@ -48,7 +48,7 @@ const PayslipList = ({payslip, isAdmin}) => {
                                     </td>
 
                                     <td>
-                                        <button onClick={()=> window.open(`print/payslips/${payslip._id || payslip.id}`)} className='inline-flex items-center px-3 py-1.5 text-xs font-medium rounded text-blue-600 bg-blue-50 hover:bg-blue-100 transition-colors ring-1 ring-blue-600/10'>
+                                        <button onClick={()=> window.open(`print/payslips/${slip._id || slip.id}`)} className='inline-flex items-center px-3 py-1.5 text-xs font-medium rounded text-blue-600 bg-blue-50 hover:bg-blue-100 transition-colors ring-1 ring-blue-600/10'>
                                             <Download className='w-3 h-3 mr-1.5' />Download
                                         </button>
                                     </td>
