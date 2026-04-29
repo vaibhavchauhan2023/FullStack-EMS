@@ -27,7 +27,7 @@ const PaySlips = () => {
     if(isAdmin) setEmpoloyees(dummyEmployeeData)
   },[isAdmin])
 
-  if(loading) <Loading />
+  if(loading) return <Loading />
 
   return (
     <div className="animate-fade-in">
