@@ -1,4 +1,4 @@
-import authRouter from "../routes/authRoutes"
+import authRouter from "../routes/authRoutes.js"
 import jwt from 'jsonwebtoken';
 
 

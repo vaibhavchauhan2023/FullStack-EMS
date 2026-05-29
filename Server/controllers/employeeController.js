@@ -1,7 +1,7 @@
 import Employee from "../models/Employee.js";
 import bcrypt from "bcrypt";
 import User from "../models/user.js";
-import Employee from "../models/Employee.js";
+
 
 //Get employees
 //GET /api/employees
@@ -80,7 +80,7 @@ export const updateEmployees = async (req,res) => {
         const employee = await Employee.findById(id);
         if(!employee) return res.status(404).json({error: "Employee not found"})
 
-        const employee = await Employee.findByIdAndUpdate(id, {
+        await Employee.findByIdAndUpdate(id, {
             firstName,
             lastName,
             email,
