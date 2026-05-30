@@ -1,6 +1,6 @@
 import Employee from "../models/Employee.js";
 import bcrypt from "bcrypt";
-import User from "../models/user.js";
+import User from "../models/User.js";
 
 
 //Get employees

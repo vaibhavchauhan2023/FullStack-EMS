@@ -33,5 +33,13 @@ app.use("/api/dashboard",dashboardRouter)
 
 app.use("/api/inngest", serve({ client: inngest, functions }));
 
-await connectDB();
-app.listen(PORT, ()=> console.log(`Server is running on port no: ${PORT}`))
+const startServer = async () => {
+  await connectDB();
+  if (process.env.NODE_ENV !== "production") {
+    app.listen(PORT, () => console.log(`Server is running on port no: ${PORT}`));
+  }
+};
+
+startServer();
+
+export default app;
