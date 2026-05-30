@@ -2,6 +2,8 @@ import {React, useNavigate, useState} from 'react';
 import { DEPARTMENTS } from '../assets/assets';
 import { Loader2 } from 'lucide-react';
 import { Navigate } from 'react-router-dom';
+import api from '../api/axios';
+import toast from 'react-hot-toast';
 
 const EmployeeForm = ({initialData, onSuccess, onCancel}) => {
     // const navigate = useNavigate()
@@ -10,8 +12,25 @@ const EmployeeForm = ({initialData, onSuccess, onCancel}) => {
 
     const handleSubmit = async (e)=>{
         e.preventDefault()
+        setLoading(true)
+        const formData = new FormData(e.currentTarget);
+        if(isEdit){
+            const pwd = formData.get("password")
+            if(!pwd) formData.delete("password")
+        }
 
+        try {
+            const url = isEdit ? `/employees/${initialData.id}`: "/employees";
+            const method = isEdit ? "put" : "post";
+            await api[method](url, formData)
+            onSuccess ? onSuccess() : Navigate("/employees")
+        } catch (error) {
+            toast.error(error.response?.data?.error || error.message)
+        }finally{
+            setLoading(false)
+        }
     }
+
 
   return (  
     <form onSubmit={handleSubmit} className="space-y-6 max-w-3xl animate-fade-in">
@@ -37,7 +56,7 @@ const EmployeeForm = ({initialData, onSuccess, onCancel}) => {
                 </div>
                 <div className='sm:col-span-2'>
                     <label className='block mb-2'>Bio (optional)</label>
-                    <textarea className='resize-none' placeholder='Brief Description......' name='phone' defaultValue={initialData?.bio} rows={3}/>
+                    <textarea className='resize-none' placeholder='Brief Description......' name='bio' defaultValue={initialData?.bio} rows={3}/>
                 </div>
             </div>
         </div>
@@ -108,8 +127,8 @@ const EmployeeForm = ({initialData, onSuccess, onCancel}) => {
                 <div className='sm:col-span-2'>
                     <label className='block mb-2'>System Role</label>
                     <select name="role" defaultValue={initialData?.user?.role || "EMPLOYEE"}>
-                        <option value="">Employee</option>
-                        <option value="">Admin</option>
+                        <option value="EMPLOYEE">Employee</option>
+                        <option value="ADMIN">Admin</option>
                     </select>
                 </div>
             </div>

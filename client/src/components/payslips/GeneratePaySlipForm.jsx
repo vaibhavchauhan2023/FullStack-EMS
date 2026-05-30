@@ -1,5 +1,7 @@
 import { Loader2, Plus, X } from 'lucide-react';
 import React, { useState } from 'react'
+import api from '../../api/axios';
+import toast from 'react-hot-toast';
 
 const GeneratePaySlipForm = ({employee, onSuccess}) => {
     const [isOpen , setIsOpen] = useState(false);
@@ -13,6 +15,20 @@ const GeneratePaySlipForm = ({employee, onSuccess}) => {
 
     const handleSubmit = async (e) =>{
         e.preventDefault();
+        setLoading(true)
+
+        const formData = new FormData(e.currentTarget)
+        const data = Object.fromEntries(formData.entries())
+
+        console.log("Form Payload data being sent to backend:", data);
+        try {
+            await api.post('/payslips', data)
+            setIsOpen(false)
+            onSuccess()
+        } catch (err) {
+            toast.error(err.response?.data?.error || err?.message);
+        }
+        setLoading(false)
     }
 
   return (
@@ -30,7 +46,7 @@ const GeneratePaySlipForm = ({employee, onSuccess}) => {
                     <label className='block text-sm font-medium text-slate-700 mb-2'>
                         Employee
                     </label>
-                    <select name="employees" required>
+                    <select name="employeeId" required>
                         {employee.map((e)=>(
                             <option value={e.id} key={e.id}>
                                 {e.firstName} {e.lastName} ({e.position})
@@ -45,7 +61,7 @@ const GeneratePaySlipForm = ({employee, onSuccess}) => {
                         <label className='block text-sm font-medium text-slate-700 mb-2'>
                             Month
                         </label>
-                        <select name="months">
+                        <select name="month">
                             {Array.from({length:12}, (_,i) => i+1).map(
                                 (m)=>(
                                     <option key = {m} value={m}>{m}</option>

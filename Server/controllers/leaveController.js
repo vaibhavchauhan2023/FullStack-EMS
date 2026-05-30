@@ -63,20 +63,27 @@ export const getLeaves = async (req, res) => {
     try {
         const session = req.session;
         const isAdmin = session.role === "ADMIN";
-        if(isAdmin){
+        if (isAdmin) {
             const status = req.query.status;
-            const where = status ? {status} : {};
-            const leaves = (await LeaveApplication.find(where).populate("employeeId")).sort({createdAt: -1});
-            const data = leaves.map((l)=> {
+            const where = status ? { status } : {};
+    
+            const leaves = await LeaveApplication.find(where).populate("employeeId").sort({ createdAt: -1 });
+    
+            const data = leaves.map((l) => {
                 const obj = l.toObject();
-                return{
+        
+                // 1. Safely handle cases where an employee record is missing or deleted
+                const holdsValidEmployee = !!obj.employeeId;
+
+                return {
                     ...obj,
-                    id: obj._id.toString(),
-                    employee: obj.employeeId,
-                    employeeId: obj.employeeId?._id?.toString()
-                }
-            })
-            return res.json({data})
+                    id: obj._id ? obj._id.toString() : "",
+                    employee: holdsValidEmployee ? obj.employeeId : { name: "Unknown Employee", email: "N/A" },
+                    employeeId: holdsValidEmployee ? (obj.employeeId._id ? obj.employeeId._id.toString() : null) : null
+                };
+            });
+    
+            return res.json({ data });
         }else{
             const employee = await Employee.findOne({
                 userId: session.userId

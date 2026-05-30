@@ -1,9 +1,16 @@
-import { Link } from "react-router-dom"
+import { Link, Navigate } from "react-router-dom"
 import {ShieldIcon, UserIcon, ArrowRight} from 'lucide-react'
 import LoginLeftSide from "../components/LoginLeftSide"
+import { useAuth } from "../context/AuthContext"
+import Loading from "../components/Loading"
+
 
 
 const LoginLanding = () => {
+
+    const {user, loading} = useAuth();
+    if(loading) return <Loading />
+    if(user) return <Navigate to = "/" />
 
     const portalOptions = [
         {
@@ -49,7 +56,7 @@ const LoginLanding = () => {
 
                 {/*Footer*/}
                 <div className="mt-12 text-center md:text-left text-sm text-slate-400">
-                    <p>©{new Date().getFullYear()} Vaibhav Chahan. All rights reserved</p>
+                    <p>©{new Date().getFullYear()} Vaibhav Chauhan. All rights reserved</p>
                 </div>
             </div>
         </div>
