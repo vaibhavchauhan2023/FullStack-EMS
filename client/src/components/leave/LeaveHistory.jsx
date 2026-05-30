@@ -3,14 +3,24 @@ import React from 'react'
 import { getDayTypeDisplay, getWorkingHoursDisplay } from '../../assets/assets';
 import { Check, Loader2Icon, X } from 'lucide-react';
 import {useState} from 'react';
+import api from '../../api/axios';
+import toast from 'react-hot-toast';
 
 
-export const LeaveHistory = ({leave, isAdmin, onUpdate}) => {
+const LeaveHistory = ({leave, isAdmin, onUpdate}) => {
 
     const [processing, setProcessing] = useState(null)
 
     const handleStatusUpdate = async (id, status) => {
         setProcessing(id)
+        try {
+            await api.patch(`/leave/${id}`, {status})
+            onUpdate();
+        } catch (error) {
+            toast.error(error?.response?.data?.error || error?.message)
+        }finally{
+            setProcessing(null)
+        }
     }
 
   return (
@@ -90,3 +100,6 @@ export const LeaveHistory = ({leave, isAdmin, onUpdate}) => {
     </div>
   )
 }
+
+
+export default LeaveHistory;
